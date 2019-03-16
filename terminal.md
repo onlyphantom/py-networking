@@ -41,8 +41,6 @@ Our IP address is listed above (`192.168.88.162`). Alternatively, we can employ 
 $ ipconfig getifaddr en0
 192.168.88.162
 ```
-
-
 ## Nameservers Lookup
 `nslookup` will display the actual IP address for the name queried (192.168.88.1) and also the name server used to make the request (in this case: 192.168.88.1).
 
@@ -64,7 +62,13 @@ Name:	google.com
 Address: 172.217.160.46
 ```
 
+## Ping
+```bash
+$ ping algorit.ma
+```
 
+## Scan a network
+```bash
 
-
+```
 

@@ -25,7 +25,7 @@ There exist special IP address ranges that will never be assigned to any organiz
 
 If anyone can use these addresses, wouldn't that lead to devices on the Internet using the same address? No, because traffic from private addresses (the 3 ranges above) do not route over the public Internet. Whenever a network using private addresses need to communicate with the public Internet a protocol known as **Network Address Translation** is used. Our home network and private office network, whether wired or wireless, issue IP addresses that fall into one of the three ranges.
     - NAT is a process in which our router changes our private IP address into a public one so we can transmit data over the Internet
-    - When inormations comes back to our router, it reverses the change from a real IP address (public) to a private one and forwards the traffic back to our computer
+    - When information comes back to our router, it reverses the change from a real IP address (public) to a private one and forwards the traffic back to our computer
 
 Private addresses are known as _non-routable addresses_. The networking on the Internet routes Internet activity connected to our public IP address only and not our private IP. Private IP addresses are untracked and unrestricted and IP lookup services cannot geographically locate a user's computer by them.
 
@@ -34,6 +34,27 @@ $ dig +short myip.opendns.com @resolver1.opendns.com
 103.86.158.102
 ```
 103.86.158.102 is our public IP address. When we inspect the output from `ifconfig`, notice that our devices are using private range addresses (not the public one) assigned by our broadband router through DHCP.
+
+A nifty tool useful for mapping our network is Nmap. From `ifconfig` we figured out our `inet` (192.168.88.162) and `netmask` (`0xffffff00` or equivalently: `/24`) so we can use that with Nmap:
+```bash
+$ nmap -sn 192.168.88.0/24
+Starting Nmap 7.70 ( https://nmap.org ) at 2019-03-13 18:25 WIB
+Nmap scan report for 192.168.88.1
+Host is up (0.046s latency).
+Nmap scan report for 192.168.88.160
+Host is up (0.032s latency).
+Nmap scan report for 192.168.88.162
+Host is up (0.00040s latency).
+Nmap scan report for 192.168.88.214
+Host is up (0.073s latency).
+Nmap scan report for 192.168.88.224
+Host is up (0.079s latency).
+Nmap scan report for 192.168.88.232
+Host is up (0.019s latency).
+Nmap scan report for 192.168.88.251
+Host is up (0.020s latency).
+Nmap done: 256 IP addresses (7 hosts up) scanned in 4.53 seconds
+```
 
 ## Network Interfaces
 Using `ifconfig` we see a list of hardware interfaces on our machine. An interface is a device's physical connection to its network media. A smartphone likely have at least 2 interfaces for example, one for connecting to WiFi networks and one for LTE networks.
@@ -75,7 +96,7 @@ A simplified definition of a network is that all devices on the network share a 
     - Router direct traffic **between networks** and sits between two or more networks
     - Router has multiple network interfaces, one for each network it is attached to
     - Router contains a set of rules called a routing table so it knows how to direct packets passing through it onwards based on the packets' destination IP addresses
-- Gateway forwards the packets to another router (called **upsteam**) and usually located at the network's ISP. The ISP router falls into a second category of routers as it sits outside the networks described earlier and routes traffic between network gateways. These are further arranged in tiers, and upper regional tiers route traffic for larger sections of countries or continents.
+- Gateway forwards the packets to another router (called **upstream**) and usually located at the network's ISP. The ISP router falls into a second category of routers as it sits outside the networks described earlier and routes traffic between network gateways. These are further arranged in tiers, and upper regional tiers route traffic for larger sections of countries or continents.
     - Each ISP gateway connects an ISP network to the regional routers; ISPs often have more than one gateway connecting them to the regional routers
     - Each home broadband router has a home network connected to it
 
@@ -100,10 +121,9 @@ How exactly does routers route traffic toward a destination networking using IP 
 - When a network device needs to deliver data across a network, it first compares the destination's IP address with its own network prefix. If the destination IP address has the same network prefix as that of the sending device, then it recognizes that the destination device is on the same network and can send the traffic directly to it. If the network prefixes differ, it will send the message to its default gateway, which will forward it on towards the receiving device.
 
 - When a router receives traffic that has to be forwarded, it does a similar check:
-    - Destionation IP address matches the network prefix of any of the networks that it is connected to: send to destination device
-        Else: Consult its routing table
-            If finds a matching rule: Sends the message to the router that it found listed
-                Else: Send traffic to its own default gateway
+    - Destination IP address matches the network prefix of any of the networks that it is connected to: send to destination device
+        - Else: Consult its routing table; If finds a matching rule: Sends the message to the router that it found listed
+            - Else: Send traffic to its own default gateway
 
 - When we create a network with a given network prefix, the digits to the right of the network prefix are available for assignment to the network devices. The number of the available addresses is $2^n-2$ since two of the addresses are reserved
     - The first reserved address is called the network address
