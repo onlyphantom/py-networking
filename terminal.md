@@ -33,7 +33,6 @@ Ethernet Address: f0:18:98:57:c9:71
 Hardware Port: Thunderbolt 1
 Device: en1
 Ethernet Address: 86:00:9d:61:53:01
-...
 ```
 
 Our IP address is listed above (`192.168.88.162`). Alternatively, we can employ a more direct approach:
@@ -69,6 +68,41 @@ $ ping algorit.ma
 
 ## Scan a network
 ```bash
-
+$ nmap -sn 192.168.88.0/24
+Starting Nmap 7.70 ( https://nmap.org ) at 2019-03-13 20:47 WIB
+Nmap scan report for 192.168.88.1
+Host is up (0.019s latency).
+Nmap scan report for 192.168.88.160
+Host is up (0.029s latency).
+Nmap scan report for 192.168.88.162
+Host is up (0.0016s latency).
+Nmap scan report for 192.168.88.224
+Host is up (0.071s latency).
+Nmap scan report for 192.168.88.232
+Host is up (0.041s latency).
+Nmap scan report for 192.168.88.251
+Host is up (0.032s latency).
+Nmap done: 256 IP addresses (6 hosts up) scanned in 6.81 seconds
 ```
 
+## Network / Sockets Status on Host Machine
+1. Execute `helpers/echo-server.py` in one terminal; 
+2. While (1) listens for connection open a second terminal; Execute `helpers/echo-client.py`
+3. Go back to (1) and notice the the printed message: `Connected by ('127.0.0.1', 57007)`. 57007 is the port number for the client socket, not the server socket. 
+4. Use `netstat -an` or `lsof -i -n` to view socket state
+
+```bash
+$ netstat -an
+Active Internet connections (including servers)
+Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)   
+tcp4       0      0  127.0.0.1.44444        *.*                    LISTEN 
+```
+If in `helpers/echo-server.py` we substituted `HOST='127.0.0.1'` for `HOST=''` we would expect the Local Address file printed in netstat to be `*.44444` instead of `127.0.0.1.44444`. When the `Local` address is `*.44444` which means all available host interfaces that support the address family will be used. The `tcp4` value in the `Proto` column tells us that `socket.AF_INET` was used (IPv4). 
+
+Another way of seeing this is the `lsof` command, which stands for "list open files". When used with the `i` flag, it gives you the COMMAND, PID (process id) and USER (user id) of open Internet sockets.
+
+```bash
+$ lsof -i -n
+COMMAND     PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+python3.6 22459 samuel    3u  IPv4 0x1af15eb429051673      0t0  TCP 127.0.0.1:44444 (LISTEN)
+```

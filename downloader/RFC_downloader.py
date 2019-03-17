@@ -1,4 +1,4 @@
-# Example: python RFC_downloader.py 2324 | less
+# Example: python downloader/RFC_downloader.py 2324 | less
 # 'less' is a terminal pager: https://en.wikipedia.org/wiki/Less_(Unix)
 
 import sys, urllib.request
