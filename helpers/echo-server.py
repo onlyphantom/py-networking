@@ -1,15 +1,28 @@
+# =====================================================
+#                        Purpose:
+# Illustrate the Socket > Bind > Listen > Accept 
+# > Receive > Send > Close paradigm illustrated in
+# 2_tcpipmodel.md
+
+# socket.socket(IPv4, TCP)
+# socket.bind((Host, Port))
+# socket.listen() # ready to accept connections
+# socket.accept() # blocks port & return a new socket 
+#                 # object representing the connection
+# conn.recv
+# conn.send()
+# =====================================================
+
 import socket
 
 HOST = '127.0.0.1' # Standard loopback interface address (localhost)
-PORT = 44444     # Non-privileged ports are > 1024
+PORT = 44444     # Port to listen on. Non-privileged ports are > 1023
 
-# SOCK_STREAM is the socket type for TCP
-# SOCK_DGRAM is for UDP
-# AF_INET is the internet address family for IPv4
+# Argument 1: the address family (AF_INET = IPv4)
+# Argument 2: socket type (SOCK_STREAM = TCP, SOCK_DGRAM = UDP)
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
-    # enables server to accept() connections by becoming a listening socket
     s.listen() 
     # accept() blocks and waits for an incoming connection
     # when a client connects, it returns a new socket object representing the connection

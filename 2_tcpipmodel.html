@@ -1,0 +1,470 @@
+<!DOCTYPE html><html><head>
+      <title>2_tcpipmodel</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:////Users/samuel/.vscode/extensions/shd101wyy.markdown-preview-enhanced-0.3.12/node_modules/@shd101wyy/mume/dependencies/katex/katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      <style> 
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}
+
+/* highlight */
+pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+pre[data-line] .line-highlight-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+}
+
+pre[data-line] .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+pre[data-line] .line-highlight:before, 
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+ 
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview   ">
+      <h1 class="mume-header" id="the-tcpip-five-layer-network-model">The TCP/IP Five-Layer Network Model</h1>
+
+<p>There are several models that aim to explain how network devices communicate but in this guide we&apos;ll use the Five-Layer Network Model</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Layer Name</th>
+<th>Examle Protocols</th>
+<th>Protocol Data Unit</th>
+<th>Addressing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>Application</td>
+<td>HTTP, SMTP, IMAP</td>
+<td>Messages</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Transport</td>
+<td>TCP/UDP</td>
+<td>Segment</td>
+<td>Port #&apos;s</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Network</td>
+<td>IP</td>
+<td>Datagram</td>
+<td>IP address</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Data Link</td>
+<td>Ethernet, WiFi</td>
+<td>Frames</td>
+<td>MAC Address</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Physical</td>
+<td>10 Base T, 802.11</td>
+<td>Bits</td>
+<td>n/a</td>
+</tr>
+</tbody>
+</table>
+<h2 class="mume-header" id="physical-layer">Physical Layer</h2>
+
+<ul>
+<li>Represents the physical devices that interconnect computers, such as a cable or a Wi-Fi radio
+<ul>
+<li>Specifications for the networking cable and the connectors that join devices together</li>
+<li>Specifications describing how signals are sent over these connections</li>
+<li>All about cabling, connectors and sending signals</li>
+</ul>
+</li>
+</ul>
+<h2 class="mume-header" id="data-link-layer">Data Link Layer</h2>
+
+<p>Responsible for defining a common way to interpret these signals so network devices can communicate. It provides the service of getting the data from one network device to another directly connected network device<br>
+- Lots of protocols exist at this layer but the most common is the Ethernet, although wireless technologies are becoming more popular<br>
+- Beyond specifying physical layer attributes, the Ethernet standards also define a protocol responsible for getting data to nodes on the same network or link</p>
+<h2 class="mume-header" id="network-layer">Network Layer</h2>
+
+<ul>
+<li>The &quot;internet&quot; layer that allows different networks to communicate with each other through devices known as routers
+<ul>
+<li>While the data link layer gets data across a single link, the network layer is responsible for getting data delivered across a collection of networks</li>
+<li>The most common protocol at this layer is the Internet Protocol (IP)</li>
+</ul>
+</li>
+</ul>
+<h2 class="mume-header" id="transport-layer">Transport Layer</h2>
+
+<ul>
+<li>We may run an email application and web server on the same server at the same time, but our emails end up in our web browser while web pages arrive at our web browser: this is down to the transport layer.
+<ul>
+<li>While the network layer delivers data between two individual nodes, the transport layer sorts out which client and server programs are supposed to get the data.</li>
+<li>The most common protocol at this layer is the Transmission Control Protocol (TCP)</li>
+<li>Other transfer protocols also use IP to get around, including the User Datagram Protocol (UDP). TCP and UDP ensure data gets to the right application running on those nodes</li>
+</ul>
+</li>
+</ul>
+<h3 class="mume-header" id="tcp-and-udp">TCP and UDP</h3>
+
+<p>Recall that while IP facilitates the transport of data from one network device to another, it doesn&apos;t provide the destination device a way of knowing what to do with the data once it receives it. One solution would be to program every process running on the destination device to check all of the incoming data to see if any are interested in it, but this is infeasible from a performance and security standpoint.</p>
+<p><strong>Transmission Control Protocol (TCP)</strong> and <strong>User Datagram Protocol (UDP)</strong> both provides end-to-end transportation of data between applications on different devices and they solve the question by introducing the concept of <strong>ports</strong>. A port is an endpoint, which is attached to one of the IP adderesses assigned to the network device.<br>
+- Ports are claimed by a process running on the device, and the process is said to be <strong>listening</strong> on that port<br>
+- Ports are represented by a 16-bit number so each IP address on a device has 65,635 ports a process can claim (port number 0 is reserved)<br>
+- Ports can be claimed by one process at a time (although a process can claim more than one port at a time)</p>
+<ol>
+<li>When a message is sent over the network through TCP or UDP, the sending application sets the destination port number in the header of the TCP or UDP packet
+<ul>
+<li>Port numbers need to be known before the message was sent (hence &quot;convention&quot;)</li>
+</ul>
+</li>
+<li>When the message arrives at the destination, the TCP or UDP protocol implementation on the receiving device reads the port number and delivers the message payload to the process listening on that port. Most OS contains a copy of this list of services, in <code>/etc/services</code>:</li>
+</ol>
+<pre data-role="codeBlock" data-info="bash" class="language-bash">$ <span class="token function">sed</span> -n <span class="token string">&apos;70, 90 p&apos;</span> /etc/services
+chargen          19/udp     <span class="token comment"># Character Generator</span>
+chargen          19/tcp     <span class="token comment"># Character Generator</span>
+ftp-data         20/udp     <span class="token comment"># File Transfer [Default Data]</span>
+ftp-data         20/tcp     <span class="token comment"># File Transfer [Default Data]</span>
+<span class="token function">ftp</span>              21/udp     <span class="token comment"># File Transfer [Control]</span>
+<span class="token function">ftp</span>              21/tcp     <span class="token comment"># File Transfer [Control]</span>
+<span class="token comment">#                          Jon Postel &lt;postel@isi.edu&gt;</span>
+<span class="token function">ssh</span>              22/udp     <span class="token comment"># SSH Remote Login Protocol</span>
+<span class="token function">ssh</span>              22/tcp     <span class="token comment"># SSH Remote Login Protocol</span>
+<span class="token comment">#                          Tatu Ylonen &lt;ylo@cs.hut.fi&gt;</span>
+telnet           23/udp     <span class="token comment"># Telnet</span>
+telnet           23/tcp     <span class="token comment"># Telnet</span>
+<span class="token comment">#                          Rick Adams &lt;rick@UUNET.UU.NET&gt;</span>
+smtp             25/udp     <span class="token comment"># Simple Mail Transfer</span>
+smtp             25/tcp     <span class="token comment"># Simple Mail Transfer</span>
+</pre><p>TCP and UDP packet headers may also include a <strong>source port</strong> number. This is optional for UDP but mandatory for TCP. The source port number tells the receiving application on the server where it should send replies to when sending data back to the client.</p>
+<p>A quick overview on UDP: it is deliberately uncomplicated and provides no services other than those that we described in earlier sections. It just takes the data, packetizes it with the destination port number (and optional source port number) then hands it off to the local Internet Protocol for delivery. Applications on the receiving end see the data in the same discrete chunks in which it was packetized. Like IP, UDP is a connectionless protocol: both IP and UDP attempt to deliver their packets on a best effort basis but makes no guarantee that the packets will arrive their destinations. Often times it&apos;s up to a higher layer protocol or the sending application to determine if the packets have arrived.<br>
+- Tyoical applications of UDP: internet telephony, video streaming, DNS queries</p>
+<p>An overview of the more dependable sibling, TCP: it is a connection based protocol (as opposed to connectionless like UDP). In such a protocol, no data is sent until the server and client <strong>have performed an initial exchange of control packets</strong> (&quot;handshake&quot;). This establishes a connection, and from then on data can be sent. Each data packet that is received is acknowledged by the receiving party, and it does so by sending a packet called an <strong>ACK</strong>. As such, TCP always requires that the packets include a source port number because it depends on the continual two-way exchange of messages.</p>
+<p>From an application&apos;s point of view, the application sees data transmitted under the UDP protocol in discrete chunks whereas a TCP connections presents the data as a continuous, seamless stream of bytes. This also means that with TCP we must decide a mechanism for unambigiously determining where our messages start and end.</p>
+<p>TCP provides the following services:</p>
+<ul>
+<li>In-order delivery</li>
+<li>Receipt acknowledgment</li>
+<li>Error detection</li>
+<li>FLow and congestion control</li>
+</ul>
+<p>Data sent through TCP is guaranteed to get delivered to the receiving application in the order that it was sent in. The receiving TCP implementation buffers the received packets on the receiving device and then waits until it can deliver them in the correct order before passing them to the application. If an ACK is not received for a sent packet, it will be resent within a time period - if there&apos;s still no response TCP will try resending the packet at increasing intervals until a second, longer timeout period expires at which point it gives up and notify the sending application that it has been unsuccessful.</p>
+<p>The TCP header includes a checksum of the header data and the payload, allowing the receiver to verify whether a packet&apos;s contents have been modified during the transmission. TCP also includes algorithms which ensure that traffic is not sent too quickly for the receiving device to process, which includes inference on network conditions and regulate the transmission rate to avoid network congestion. Many popular higher level protocols such as HTTP, SMTP, SSH and IMAP depend on TCP.</p>
+<p>Why then would we need a connectionless protocol like UDP? For the most part it&apos;s because  the Internet is still pretty reliable and most packets do get delivered. The connectionless protocols are useful where the minimum transfer overhead is required and where occasional dropped packet isn&apos;t a big deal. TCP&apos;s reliability and congestion control necessitates additional packets and round-trips, and even introduces deliberate delays (to prevent congestion) leading to increased latency while providing little value for real-time services. Case in point: a football streaming media or Skype call may experience a small transient glitch or drop in signal quality, but as long as the packets keep coming, the steam can recover. The round-trips and added latency on the hand is less desirable.</p>
+<p>As we&apos;ll see later in the <code>helpers/echo-server.py</code> and <code>helpers/echo-client.py</code> example, the Python <code>socket</code> module provides a convenient and consistent API that maps directly to these system calls, their C counterparts.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><img src="assets/tcp_flow.png" alt></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><em>TCP Socket Flow diagram, OnionBulb</em></td>
+</tr>
+</tbody>
+</table>
+<h2 class="mume-header" id="application-layer">Application Layer</h2>
+
+<ul>
+<li>Lots of protocols exist at this layer, as this layer is deliberately left open as a catch-all for any protocol that is developed on top of TCP or UDP (or even IP, those these are rarer). Examples are HTTP, SMTP, IMAP, DNS and FTP.</li>
+</ul>
+<h2 class="mume-header" id="summary">Summary</h2>
+
+<p>We can think of layers like different aspects of a package being delivered:</p>
+<ul>
+<li>Physical layer is the delivery truck and the roads</li>
+<li>The data link layer is how the deliver truck gets from one intersection to another over and over</li>
+<li>The network layer identifies which roads need to be taken to get from address A to B</li>
+<li>The transport layer ensures the delivery guy knows how to knock on your door when the package arrive</li>
+<li>The application layer is the contents of the package itself</li>
+<li>To see a demo of how the network modules act as a stack: <a href="smtp.md">Demo: smtp</a></li>
+</ul>
+
+      </div>
+      <div class="md-sidebar-toc"><ul>
+<li><a href="#the-tcpip-five-layer-network-model">The TCP/IP Five-Layer Network Model</a>
+<ul>
+<li><a href="#physical-layer">Physical Layer</a></li>
+<li><a href="#data-link-layer">Data Link Layer</a></li>
+<li><a href="#network-layer">Network Layer</a></li>
+<li><a href="#transport-layer">Transport Layer</a>
+<ul>
+<li><a href="#tcp-and-udp">TCP and UDP</a></li>
+</ul>
+</li>
+<li><a href="#application-layer">Application Layer</a></li>
+<li><a href="#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
+</div>
+      <a id="sidebar-toc-btn">&#x2261;</a>
+    
+    
+    
+    
+    
+    
+    
+    
+<script>
+
+var sidebarTOCBtn = document.getElementById('sidebar-toc-btn')
+sidebarTOCBtn.addEventListener('click', function(event) {
+  event.stopPropagation()
+  if (document.body.hasAttribute('html-show-sidebar-toc')) {
+    document.body.removeAttribute('html-show-sidebar-toc')
+  } else {
+    document.body.setAttribute('html-show-sidebar-toc', true)
+  }
+})
+</script>
+      
+  
+    </body></html>

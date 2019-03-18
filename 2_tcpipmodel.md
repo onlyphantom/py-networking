@@ -84,6 +84,11 @@ The TCP header includes a checksum of the header data and the payload, allowing 
 
 Why then would we need a connectionless protocol like UDP? For the most part it's because  the Internet is still pretty reliable and most packets do get delivered. The connectionless protocols are useful where the minimum transfer overhead is required and where occasional dropped packet isn't a big deal. TCP's reliability and congestion control necessitates additional packets and round-trips, and even introduces deliberate delays (to prevent congestion) leading to increased latency while providing little value for real-time services. Case in point: a football streaming media or Skype call may experience a small transient glitch or drop in signal quality, but as long as the packets keep coming, the steam can recover. The round-trips and added latency on the hand is less desirable.  
 
+As we'll see later in the `helpers/echo-server.py` and `helpers/echo-client.py` example, the Python `socket` module provides a convenient and consistent API that maps directly to these system calls, their C counterparts. 
+| ![](assets/tcp_flow.png)| 
+|:--:| 
+| *TCP Socket Flow diagram, OnionBulb* |
+
 ## Application Layer
 - Lots of protocols exist at this layer, as this layer is deliberately left open as a catch-all for any protocol that is developed on top of TCP or UDP (or even IP, those these are rarer). Examples are HTTP, SMTP, IMAP, DNS and FTP.
 

@@ -99,6 +99,25 @@ tcp4       0      0  127.0.0.1.44444        *.*                    LISTEN
 ```
 If in `helpers/echo-server.py` we substituted `HOST='127.0.0.1'` for `HOST=''` we would expect the Local Address file printed in netstat to be `*.44444` instead of `127.0.0.1.44444`. When the `Local` address is `*.44444` which means all available host interfaces that support the address family will be used. The `tcp4` value in the `Proto` column tells us that `socket.AF_INET` was used (IPv4). 
 
+```bash
+$ netstat -anl | grep LISTE
+```
+In the above command, we use `netstat` with the following parameters before passing it to the regex call to search for only LISTENING ports.
+
+Common parameters with netstat:
+- `a`: List **a**ll current connections
+- `n`: Suppress hostname lookup so host **n**ame is unknown and ip address is given. Makes the execution faster by disabling reverse dns lookup
+- `l`: List only **l**istening ports
+- `-p tcp` or `-p udp` for tcp or udp only ports
+- `netstat -i`: print network interfaces
+
+Example usage:
+```bash
+$ netstat -anl -p tcp | grep 44444 
+Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)   
+tcp4       0      0  127.0.0.1.44444        *.*                    LISTEN     
+```
+
 Another way of seeing this is the `lsof` command, which stands for "list open files". When used with the `i` flag, it gives you the COMMAND, PID (process id) and USER (user id) of open Internet sockets.
 
 ```bash
@@ -106,3 +125,17 @@ $ lsof -i -n
 COMMAND     PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
 python3.6 22459 samuel    3u  IPv4 0x1af15eb429051673      0t0  TCP 127.0.0.1:44444 (LISTEN)
 ```
+
+If we inspect the code in `helpers/echo-server.py` and know which port to look for as well as the protocol, we can also use `nmap` to scan for, in this instance, TCP port number 44444 (`nmap -p T:44444 127.0.0.1`):
+```bash
+$ nmap -p T:44444 127.0.0.1
+Starting Nmap 7.70 ( https://nmap.org ) at 2019-03-18 14:09 +08
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.00018s latency).
+
+PORT      STATE SERVICE
+44444/tcp open  cognex-dataman
+
+Nmap done: 1 IP address (1 host up) scanned in 0.06 seconds
+```
+
