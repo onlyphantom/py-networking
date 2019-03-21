@@ -5,11 +5,12 @@
 # Same loop: Socket > Bind > Listen > Accept 
 # > Receive > Send > Close paradigm 
 #
-# Listening socket: 
+# ## Listening socket: 
 # s.socket().bind().listen().setblocking(F) -> register with Sel
-# Accept connections from listening socket:
+# ## Accept connections from listening socket:
 # s.accept().setblocking(F) -> register with Sel
-# 
+# ## Receiving data from connected sockets:
+# s.recv() -> append to data; sel.unregister(); s.close()
 # socket.listen() # ready to accept connections
 # conn.recv
 # conn.send()
@@ -42,21 +43,17 @@ lsock.setblocking(False)
 # and returned when select() returns
 sel.register(lsock, selectors.EVENT_READ, data=None)
 while True:
-    # blocks until there are sockets ready for I/O
-    # when unblock, return a list of (key, event) tuples 
-    # one for each socket. key is a SelectorKey that contains 
-    # the socket object (.fileobj). mask is an event mask of 
-    # the operations that are ready. 
-    # 
-    # When key.data is None, it's from the listening socket (server).
-    # We accept() the connection by registering the new socket 
-    # object with the selector.
-    # When key.data is not None, it's a client socket that's already
-    # accepted and we need to service it using the key and mask
+    # blocks until there are sockets ready for I/O. When unblock,
+    # return a list of (SelectorKey, event) tuples one for each 
+    # socket. SelectorKey contains the socket object (.fileobj)
+    # mask is an event mask of the operations that are ready
     events = sel.select(timeout=None) 
     for key, mask in events:
+        # key.data can only be None if its the listening socket so we
+        # accept the connection (get new socket object & register)
         if key.data is None:
             accept_wrapper(key.fileobj)
+        # then we know its a client socket; Operate on the socket
         else:
             service_connection(key, mask)
 
@@ -81,8 +78,14 @@ def service_connection(key, mask):
         if recv_data:
             data.outb += recv_data
         else:
+            # it means client has closed their connection, so server should too
             print('closing connection to', data.addr)
+            # so it's no longer monitored by selector
             sel.unregister(sock)
             sock.close()
     if mask & selectors.EVENT_WRITE:
-        pass
+        if data.outb:
+            print('echoing', repr(data.outb), 'to', data.addr)
+            sent = sock.send(data.outb)
+            data.outb += data.outb[sent:]
+
