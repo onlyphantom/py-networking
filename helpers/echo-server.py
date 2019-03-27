@@ -18,7 +18,7 @@ import socket
 HOST = '127.0.0.1' # Standard loopback interface address (localhost)
 PORT = 44444     # Port to listen on. Non-privileged ports are > 1023
 
-# Argument 1: the address family (AF_INET = IPv4)
+# Argument 1: address family (AF_INET = IPv4)
 # Argument 2: socket type (SOCK_STREAM = TCP, SOCK_DGRAM = UDP)
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

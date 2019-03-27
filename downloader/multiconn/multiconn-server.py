@@ -63,6 +63,7 @@ def accept_wrapper(sock):
     conn, addr = sock.accept()
     print("accepted connection from", addr)
     conn.setblocking(False)
+    # print(data.inb) returns b''
     data = types.SimpleNamespace(addr=addr, inb=b'', outb=b'')
     events = selectors.EVENT_READ | selectors.EVENT_WRITE
     # register again, but this socket READ / WRITE and return data
@@ -73,6 +74,7 @@ def service_connection(key, mask):
     # and data object. mask contains events that are ready 
     sock = key.fileobj
     data = key.data
+    # if socket is ready for reading
     if mask & selectors.EVENT_READ:
         recv_data = sock.recv(1024)
         if recv_data:
@@ -83,9 +85,10 @@ def service_connection(key, mask):
             # so it's no longer monitored by selector
             sel.unregister(sock)
             sock.close()
+    # if socket is ready for writing
     if mask & selectors.EVENT_WRITE:
         if data.outb:
             print('echoing', repr(data.outb), 'to', data.addr)
             sent = sock.send(data.outb)
-            data.outb += data.outb[sent:]
+            data.outb = data.outb[sent:]
 

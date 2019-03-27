@@ -23,7 +23,7 @@ req = req.format(
     port=port
 )
 
-sock.sendall(req.encode('ascii'))
+sock.sendall(req.encode('ascii')) # data sent through TCP must be raw bytes
 rfc_raw = bytearray()
 while True:
     buf = sock.recv(4096) # receive up to 4096 bytes from the socket
